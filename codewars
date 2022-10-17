@@ -1,0 +1,295 @@
+//! Decode the Morse code : Difficulté 6 kyu
+
+decodeMorse = function(morseCode){
+        morseCode = morseCode.trim();
+        let refinedData = morseCode.split('   ');
+        let result = [];
+        
+        for (let i = 0; i < refinedData.length; i++) {
+        let temp = refinedData[i].split(' ');
+        for (let j = 0; j < temp.length; j++) {
+            if (MORSE_CODE[temp[j]]) {
+            result.push(MORSE_CODE[temp[j]]);
+            }
+        }
+        
+        if (i !== refinedData.length - 1) {
+        result.push(' ');
+        }
+        }
+        return result.join('');
+    }
+    //TODO Best practice:
+    //TODO first one:
+    decodeMorse = function(morseCode){
+        function decodeMorseLetter(letter) {
+        return MORSE_CODE[letter];
+        }
+        function decodeMorseWord(word) {
+        return word.split(' ').map(decodeMorseLetter).join('');
+        }
+        return morseCode.trim().split('   ').map(decodeMorseWord).join(' ');
+    }
+
+    //TODO Second one :
+
+    decodeMorse = function(morseCode){
+        return morseCode
+            .trim()
+            .split(/  | /)
+            .map( (code) => MORSE_CODE[code] || ' ')
+            .join('');
+        }
+
+        if (condition) {
+            
+        }
+
+//! Buying a car : difficulté: kyu 6
+
+            function nbMonths(startPriceOld, startPriceNew, savingperMonth, percentLossByMonth){
+    
+                // Check to see you even need to save first! If not, return out
+                if(startPriceOld >= startPriceNew) {return [0, Math.round(startPriceOld - startPriceNew)];}
+            
+                // Otherwise, declare the months and the actual total 
+                var months = 0, total = startPriceOld;
+            
+                // while loop to run while the total is less than the new price of the car
+                while(total < startPriceNew) {
+                    // increment the savings per month onto the total
+                    total += savingperMonth;
+                
+                    // decrease the total by the percentage loss per month
+                    total -= startPriceOld * percentLossByMonth / 100;
+            
+                    // manipulate the start price new and old to reflect the percent loss by the current month
+                    startPriceNew -= startPriceNew * percentLossByMonth / 100;
+                    startPriceOld -= startPriceOld * percentLossByMonth / 100;
+                    
+                    // Increment the months
+                    months ++;
+            
+                    // Use mod to determine even or odd month so that we know if we should increase the percentage loss by month by .5
+                    months % 2 !== 0 ? percentLossByMonth += 0.5 : percentLossByMonth;
+                
+            }
+            
+            return [months, Math.round(total - startPriceNew)];
+            }
+//TODO Best Practice
+
+//TODO First one :
+            function nbMonths(startPriceOld, startPriceNew, savingperMonth, percentLossByMonth){
+                var months = 0, moneySaved = 0;
+                while (startPriceNew > startPriceOld + moneySaved){
+                moneySaved += savingperMonth;
+                startPriceOld -= (startPriceOld * (percentLossByMonth / 100));
+                startPriceNew -= (startPriceNew * (percentLossByMonth / 100));
+                months++;
+                if (months % 2 == 1){
+                    percentLossByMonth += .5;
+                }
+                }
+                return [months, Math.round(startPriceOld + moneySaved - startPriceNew)];
+            }
+
+//TODO Second one :
+            function nbMonths(startPriceOld, startPriceNew, savingperMonth, percentLossByMonth){
+                let oldCar = startPriceOld;
+                let newCar = startPriceNew;
+                let rate = percentLossByMonth;
+                let savings = 0;
+                let months = 0;
+                
+                while(savings + oldCar < newCar){
+                months++;
+                if (months % 2 === 0){
+                    rate += 0.5;
+                }
+                
+                oldCar -= (oldCar * (rate / 100));
+                newCar -= (newCar * (rate / 100));
+                savings += savingperMonth;
+                }
+                
+                let change = (savings + oldCar) - newCar;
+                
+                return [months, change.toFixed(0) * 1];
+            }
+            
+
+//!Help the general decode secret enemy messages: difficulté: kyu3
+//weird solution
+device.decode = function (w) {
+
+    let key = 'abdhpF,82QsLirJejtNmzZKgnB3SwTyXG ?.6YIcflxVC5WE94UA1OoD70MkvRuPqH'.split("")
+    return w.split("").map( (c,i) => key.indexOf(c) > -1 ? key[(key.indexOf(c) + 65 - i) % 66 ] : c).join("")
+  }
+
+    //TODO Best Practice :
+
+    //TODO First one :
+
+        device.decode = function (w) {
+            for (j = 0; j < 65; j++){
+            w = device.encode (w)
+            }
+            return w; 
+        }
+
+    //TODO Second One :
+
+        var chrs = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.0123456789? '
+
+    function build_alphabets_table () {
+        return chrs.split('').map(function(c) {
+            return device.encode(new Array(67).join(c));
+        });
+    }
+
+    device.decode = function (w) {
+    var tbl = build_alphabets_table();
+    return w.replace(/./g, function(c, i) {
+        return chrs[tbl.map(function(a) { return a[i%66]; }).indexOf(c)] || c;
+    });
+    }
+
+    //!Screen Locking Patterns: difficulté:kyu3
+
+        let CONNECTIONS = {
+            'A' : ['B', 'CB', 'D', 'E', 'F', 'GD', 'H', 'IE'],
+            'B' : ['A', 'C', 'D', 'E', 'F', 'G', 'HE', 'I'],
+            'C' : ['B', 'AB', 'D', 'E', 'F', 'GE', 'H', 'IF'],
+            'D' : ['A', 'B', 'C', 'E', 'FE', 'G', 'H', 'I'],
+            'E' : ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I'],
+            'F' : ['A', 'B', 'C', 'DE', 'E', 'G', 'H', 'I'],
+            'G' : ['AD', 'B', 'CE', 'D', 'E', 'F', 'H', 'IH'],
+            'H' : ['A', 'BE', 'C', 'D', 'E', 'F', 'G', 'I'],
+            'I' : ['AE', 'B', 'CF', 'D', 'E', 'F', 'GH', 'H']
+        }
+        
+        // Given a position and already visited positions
+        // return new posible positions
+        const posibleConnections = (point, visited) => {
+            return CONNECTIONS[point].reduce( (res, pos) => {
+            let [dest, over] = pos.split("")
+            if (visited.indexOf(dest) === -1 &&
+                (!over || visited.indexOf(over) !== -1)) res.push(dest)
+            return res
+            }, [])
+        }
+        
+        // Recursive search for total posible patterns
+        const countPatternsFrom = (pattern, max) => {
+            let total = 0
+            if (pattern.length > max) return total
+            if (pattern.length === max) return total + 1
+            let last = pattern.slice(-1)
+            let posible = posibleConnections(last, pattern)
+            if (pattern.length + 1 === max) return posible.length
+            for (newPosition of posible) {
+            total += countPatternsFrom(pattern + newPosition, max)
+            }
+            return total
+        } 
+
+        //TODO Best Practices:
+        //TODO First one:
+
+            const memo={
+                'A':[0,1,5,31,154,684,2516,7104,13792,13792],
+                'B':[0,1,7,37,188,816,2926,8118,15564,15564],
+                'C':[0,1,5,31,154,684,2516,7104,13792,13792],
+                'D':[0,1,7,37,188,816,2926,8118,15564,15564],
+                'E':[0,1,8,48,256,1152,4248,12024,23280,23280],
+                'F':[0,1,7,37,188,816,2926,8118,15564,15564],
+                'G':[0,1,5,31,154,684,2516,7104,13792,13792],
+                'H':[0,1,7,37,188,816,2926,8118,15564,15564],
+                'I':[0,1,5,31,154,684,2516,7104,13792,13792]
+            };
+            
+            function countPatternsFrom(start, length) {
+                return memo[start][length]||0;
+            }
+
+        //TODO Second One :
+
+            /* String, Int ->  Int */
+    function countPatternsFrom(firstDot, length) {
+    
+        let grid = [['A','D','G'],['B','E','H'],['C','F','I']];
+        grid = grid.map((col, x) => col.map((char, y) => { return {char, x, y }}));
+    
+        let firstPoint = grid.map(col => col.find(cell => cell.char===firstDot)).filter(f=>f)[0];
+    
+        return go(grid, firstPoint, [], length);
+    }
+    
+    function go(grid, point, visited, length) {
+        
+        visited.push(point.char);
+        
+        // check final?
+        if (visited.length === length) return 1;
+        
+        // next possible cells
+        let next = [], neighbors = [-2,-1,0,1,2];
+    
+        neighbors.forEach(x => {
+        neighbors.forEach(y => {
+    
+            // neighbor conditions
+            if (x===0 && y==0) return;
+            if (Math.abs(x) > 1 && Math.abs(y) !== 1) return;
+            if (Math.abs(y) > 1 && Math.abs(x) !== 1) return;
+            
+            let [newX, newY] = [point.x+x, point.y+y];
+            if (newX < 0 || newY < 0 || newX > 2 || newY > 2) return;
+    
+            // adjacent cells
+            let newPoint = grid[newX][newY];
+            if (!visited.includes(newPoint.char)) {
+            next.push(newPoint);
+            return;
+            }
+            
+            // if visited, jump over
+            if (Math.max(Math.abs(x), Math.abs(y)) < 2) {
+            newX = point.x+x*2;
+            newY = point.y+y*2;
+            if (grid[newX] && grid[newX][newY]) {
+                newPoint = grid[newX][newY];
+                if (!visited.includes(newPoint.char)) {
+                next.push(newPoint);
+                }
+            }
+            }    
+            
+        });
+        });
+    
+        
+        // go to next points and count combinations
+        return next.reduce((a, n) => a + go(grid, n, visited.slice(0), length), 0);
+        
+    }
+
+    //!Are the numbers in order? Difficulte: kyu7
+
+    //TODO Best practice
+    //TODO First One :
+
+        function inAscOrder(arr) {
+            for(let i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i+1]) {
+                return false; 
+            }
+            }
+            return true;
+        }
+
+        //TODO Second One :
+
+        const inAscOrder = arr => arr.join('') === arr.sort((a, b) => a - b).join('');
+
